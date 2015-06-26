@@ -54,3 +54,5 @@
 # Dependencies
 
 * [ASM](http://asm.ow2.org/)
+* [AspectJ 1.8.x](https://eclipse.org/aspectj/)
+
