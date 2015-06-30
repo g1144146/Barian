@@ -1,5 +1,17 @@
 *.class
 
+# NetBeans
+.nb-gradle
+
+# Mac
+.DS_store
+
+# gradle
+.gradle
+
+# Destination
+build/
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
