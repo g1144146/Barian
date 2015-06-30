@@ -34,7 +34,7 @@
     ```
     $ bash exec.sh [file path to aspectjrt.jar]
     or 
-    $ bash exec.sh [directory exists aspectjrt.jar]
+    $ sh exec.sh [directory exists aspectjrt.jar]
     ```
 
 ---------------
