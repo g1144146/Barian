@@ -6,6 +6,6 @@ public class Main {
 	}
 
 	public double method() {
-		return 1.0;
+		return 5.0;
 	}
 }

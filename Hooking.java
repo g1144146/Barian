@@ -10,25 +10,36 @@ import xyz.dimension.Premain;
 
 @Aspect
 public class Hooking {
-	// @Before("call(void hook())")
+
 	@Before("call(void xyz.dimension.Premain.perform(..))")
-	public void hookBefore() {
+	public void hookBefore() throws Exception {
 		Class<?> before = Premain.getInstance().getBefore();
 		printMethods(before.getDeclaredMethods(), "[before]");
 	}
 
-	// @After("call(void hook())")
 	@After("call(void xyz.dimension.Premain.perform(..))")
 	public void hookAfter() throws Exception {
 		Class<?> after = Premain.getInstance().getAfter();
 		printMethods(after.getDeclaredMethods(), "[after]");
-		printMethods(Class.forName("Main").getDeclaredMethods(), "[after2]");
+		// printMethods(Class.forName("Main").getDeclaredMethods(), "[after2]");
 	}
 
-	private void printMethods(Method[] methods, String timing) {
+	private void printMethods(Method[] methods, String timing) throws Exception {
 		System.out.println("");
 		System.out.println(timing);
-		Arrays.asList(methods).forEach(System.out::println);
+		Arrays.asList(methods).stream()
+			.filter((Method m) -> m.getName().equals("method"))
+			.peek(this::output)
+			.forEach(System.out::println);
 		System.out.println("");
+	}
+
+	private void output(Method m) {
+		try {
+			System.out.println("return value: " + m.invoke(new Main()));
+			System.out.println("hash code: " + m.hashCode());
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

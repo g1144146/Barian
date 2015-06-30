@@ -10,7 +10,7 @@ public class BarianClassVisitor extends ClassVisitor {
 	private String currentClass;
 
 	public BarianClassVisitor(ClassVisitor visitor, String targetClass) {
-		super(Opcodes.ASM4, visitor);
+		super(Opcodes.ASM5, visitor);
 		this.targetClass = targetClass;
 	}
 
@@ -18,39 +18,46 @@ public class BarianClassVisitor extends ClassVisitor {
 	public void visit(final int version, final int access,
 					  final String name, final String signature,
 					  final String superName, final String[] interfaces) {
-//		this.className = name;
 		this.currentClass = name;
 		super.visit(version, access, name, signature, superName, interfaces);
-//		System.out.println("   + " + name);
 	}
 
 	@Override
-	public MethodVisitor visitMethod(int access, String name, String description
+	public MethodVisitor visitMethod(int access, String name, String descriptor
 									, String signature, String[] exceptions) {
-		MethodVisitor visitor = super.visitMethod(access, name, description, signature, exceptions);
-		System.out.println(">> " + name + description);
-		return new BarianMethodVisitor(visitor);
+		MethodVisitor visitor = super.visitMethod(access, name, descriptor, signature, exceptions);
+		System.out.println("[class visitor] " + currentClass + "." + name + descriptor);
+		if((name + descriptor).equals("method()D")) {
+			return new BarianMethodVisitor(visitor, currentClass);
+		}
+		return visitor;
 	}
 
 	@Override
 	public void visitEnd() {
-		System.out.println("*** visit end ***");
+		System.out.println("*** visit end ClassVisitor ***");
 		super.visitEnd();
 	}
 
 	private static final class BarianMethodVisitor extends MethodVisitor {
-		public BarianMethodVisitor(MethodVisitor mv) {
-			super(Opcodes.ASM4, mv);
+		
+		private String currentClass;
+		
+		public BarianMethodVisitor(MethodVisitor mv, String currentClass) {
+			super(Opcodes.ASM5, mv);
+			System.out.println("\t[method visitor] current class is " + currentClass);
+			this.currentClass = currentClass;
 		}
 		
 		@Override
-		public void visitMethodInsn(int opcode, String owner, String name, String desc) {
-			System.out.println(">>>> " + owner+"."+name + desc);
-			if(owner.length() == 0) {
-				super.visitMethodInsn(opcode, owner, name, "()I");
-			} else {
-				super.visitMethodInsn(opcode, owner, name, desc);
-			}
+		public void visitEnd() {
+			System.out.println("\t*** visit end MethodVisitor ***");
+			super.visitEnd();
+		}
+
+		@Override
+		public void visitLdcInsn(Object object) {
+			super.visitLdcInsn((double)10000.0);
 		}
 	}
 }

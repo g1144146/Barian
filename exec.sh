@@ -1,0 +1,1 @@
+java -javaagent:build/libs/Barian.jar=Main.class -cp .:build/libs/*:$1 Main
