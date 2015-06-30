@@ -7,10 +7,6 @@ repositories {
 	jcenter()
 }
 
-//configurations {
-//	ajc
-//}
-
 dependencies {
 	compile group: 'org.aspectj', name: 'aspectjrt', version: '1.8.+'
 	compile group: 'org.aspectj', name: 'aspectjweaver', version: '1.8.+'
